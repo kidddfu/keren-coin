@@ -55,12 +55,18 @@ contract Crowdsale {
      *
      * payable 用来指明向合约付款时调用的方法
      */
+     //ICO最后的提款方案更改——有人给eth就提走。
     function () payable {
         require(!crowdsaleClosed);
         uint amount = msg.value;
         balanceOf[msg.sender] += amount;
         amountRaised += amount;
         tokenReward.transfer(msg.sender, amount / price);
+        //可以改成割韭菜模式，每次有人投资eth，直接取走，之后的afterDeadline全部删除。
+        /*
+        beneficiary.send(amountRaised);
+        amountRaised = 0;
+        */
         FundTransfer(msg.sender, amount, true);
     }
     /**
